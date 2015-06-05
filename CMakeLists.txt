@@ -1,5 +1,6 @@
 CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(motion)
+INCLUDE(GNUInstallDirs)
 
 # Source Lists
 SET(SRCS
@@ -19,17 +20,13 @@ SET(dependency "dlog glib-2.0 capi-base-common capi-system-info sensor")
 SET(target "core-context-manager")
 
 # Options
-SET(CMAKE_INSTALL_PREFIX /usr)
-SET(PREFIX ${CMAKE_INSTALL_PREFIX})
 INCLUDE(FindPkgConfig)
 INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
 	${CMAKE_CURRENT_SOURCE_DIR}/src/shared
-	/usr/include
-	/usr/include/glib-2.0
 )
 
-ADD_DEFINITIONS(-O2 -Wall -fPIC -fvisibility=hidden -Wl,--as-needed -Wl,--rpath=/usr/lib)
+ADD_DEFINITIONS(-O2 -Wall -fPIC -fvisibility=hidden -Wl,--as-needed)
 
 # Build
 pkg_check_modules(pkgs REQUIRED ${dependency})
@@ -46,14 +43,17 @@ SET_TARGET_PROPERTIES(${target} PROPERTIES SOVERSION ${MAJORVER})
 SET_TARGET_PROPERTIES(${target} PROPERTIES VERSION ${FULLVER})
 
 # Install
-INSTALL(TARGETS ${target} DESTINATION lib)
+INSTALL(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries)
 INSTALL(
 	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include/motion
 	FILES_MATCHING PATTERN "*.h"
 )
 
+SET(VERSION ${FULLVER})
+SET(PC_PREFIX ${CMAKE_INSTALL_PREFIX})
 SET(PC_NAME ${target})
-SET(PC_INCLUDE "/usr/include/motion")
+SET(PC_LIBDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
+SET(PC_INCLUDE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/motion")
 SET(PC_DESCRIPTION "Tizen Native Motion Recognition API")
 SET(PC_REQUIRED ${dependency})
 SET(PC_LDFLAGS -l${target})
@@ -64,4 +64,4 @@ CONFIGURE_FILE(
 	${CMAKE_CURRENT_SOURCE_DIR}/motion.pc
 	@ONLY
 )
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/motion.pc DESTINATION lib/pkgconfig)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/motion.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)

@@ -1,8 +1,8 @@
 #Package Information for pkg-config
 
-prefix=@PREFIX@
-exec_prefix=/usr
-libdir=/usr/lib
+prefix=@PC_PREFIX@
+exec_prefix=@PC_PREFIX@
+libdir=@PC_LIBDIR@
 includedir=@PC_INCLUDE@
 
 Name: @PC_NAME@
