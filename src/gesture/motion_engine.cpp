@@ -100,7 +100,7 @@ static void me_sensor_event_cb(sensor_t sensor, unsigned int sensor_event_type, 
 	try_return_void(user_data);
 
 	int64_t ts = ctx::time::get_utc(NULL, NULL);
-	int req_id = (int)user_data;
+	int req_id = *static_cast<int*>(user_data);
 	LOGD("Received data for ReqId %d", req_id);
 
 	_cx_gesture_data data;
@@ -189,18 +189,18 @@ int ctx::gesture::me_is_supported(int motion)
 
 int ctx::gesture::me_start(_cx_gesture_h *handle, int gesture, int option)
 {
-	int req_id	= ctx::generate_rid();
 	int ev_type	= get_event_type(gesture);
 	int me_opt	= get_me_option(option);
 
+	handle->req_id = ctx::generate_rid();
+
 	try_return_result(me_opt != CTX_VALUE_UNDEFINED, GESTURE_ERROR_INVALID_PARAMETER);
 
-	int res = ctx::sensor::connect(&handle->me_handle, MOTION_SENSOR, ev_type, me_opt, me_sensor_event_cb, (void*)req_id);
+	int res = ctx::sensor::connect(&handle->me_handle, MOTION_SENSOR, ev_type, me_opt, me_sensor_event_cb, &(handle->req_id));
 	try_return_result(!IS_FAILED(res), res);
 
 	LOGI("Started MotionEngine Event %d (Gesture %d)", ev_type, gesture);
 
-	handle->req_id		= req_id;
 	handle->me_event	= ev_type;
 
 	return GESTURE_ERROR_NONE;
