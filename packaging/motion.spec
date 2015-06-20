@@ -51,9 +51,9 @@ rm -rf %{buildroot}
 %make_install
 
 mkdir -p %{buildroot}/usr/share/license
-cp LICENSE %{buildroot}/usr/share/license/motion
+cp LICENSE %{buildroot}/usr/share/license/%{name}
 # For backward compatibility
-ln -s ./motion.pc %{buildroot}/%{_libdir}/pkgconfig/libcore-context-manager.pc
+ln -s ./%{name}.pc %{buildroot}/%{_libdir}/pkgconfig/libcore-context-manager.pc
 
 %post
 /sbin/ldconfig
@@ -62,15 +62,15 @@ ln -s ./motion.pc %{buildroot}/%{_libdir}/pkgconfig/libcore-context-manager.pc
 /sbin/ldconfig
 
 %files
-%manifest packaging/motion.manifest
+%manifest packaging/%{name}.manifest
 %defattr(-,root,root,-)
 %{_libdir}/*.so*
-/usr/share/license/motion
+/usr/share/license/%{name}
 
 %package devel
 Summary:	Tizen Native Motion Recognition API (Development)
 Group:		Framework/context
-Requires:	motion = %{version}-%{release}
+Requires:	%{name} = %{version}-%{release}
 
 %description devel
 Tizen Native Motion Recognition API (Development)
@@ -83,5 +83,5 @@ Tizen Native Motion Recognition API (Development)
 
 %files devel
 %defattr(-,root,root,-)
-%{_includedir}/motion/*.h
+%{_includedir}/*/*.h
 %{_libdir}/pkgconfig/*.pc

@@ -13,7 +13,7 @@ SET(SRCS
 	src/activity/activity.cpp
 )
 
-# Dependencies
+SET(inc_subdir "context-service")
 SET(dependency "dlog glib-2.0 capi-base-common capi-system-info sensor")
 
 # Target lib (for backward compatibility, the below old naming is used)
@@ -45,7 +45,7 @@ SET_TARGET_PROPERTIES(${target} PROPERTIES VERSION ${FULLVER})
 # Install
 INSTALL(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries)
 INSTALL(
-	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION include/motion
+	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${inc_subdir}
 	FILES_MATCHING PATTERN "*.h"
 )
 
@@ -53,15 +53,15 @@ SET(VERSION ${FULLVER})
 SET(PC_PREFIX ${CMAKE_INSTALL_PREFIX})
 SET(PC_NAME ${target})
 SET(PC_LIBDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
-SET(PC_INCLUDE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/motion")
+SET(PC_INCLUDE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${inc_subdir}")
 SET(PC_DESCRIPTION "Tizen Native Motion Recognition API")
 SET(PC_REQUIRED ${dependency})
 SET(PC_LDFLAGS -l${target})
-SET(PC_CFLAGS -I\${includedir}/motion)
+SET(PC_CFLAGS -I\${includedir}/${inc_subdir})
 
 CONFIGURE_FILE(
-	motion.pc.in
-	${CMAKE_CURRENT_SOURCE_DIR}/motion.pc
+	${PROJECT_NAME}.pc.in
+	${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc
 	@ONLY
 )
-INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/motion.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
+INSTALL(FILES ${CMAKE_CURRENT_SOURCE_DIR}/${PROJECT_NAME}.pc DESTINATION ${CMAKE_INSTALL_LIBDIR}/pkgconfig)
