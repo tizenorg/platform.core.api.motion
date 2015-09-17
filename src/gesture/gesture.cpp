@@ -25,6 +25,8 @@
 #include "motion_engine.h"
 #include "gesture.h"
 
+using namespace ctx::gesture;
+
 static ctx::handle_map_t<_cx_gesture_h> handle_map;
 
 void cx_gesture_deliver_data(int req_id, _cx_gesture_data data, double timestamp, int error)
@@ -51,14 +53,14 @@ EXTAPI int gesture_is_supported(gesture_type_e gesture, bool* supported)
 	ASSERT_SUPPORTED(FEATURE_KEY_GESTURE);
 	ASSERT_NULL(supported);
 
-	if (!ctx::gesture::me_check_coverage(gesture))
-		return GESTURE_ERROR_NONE;
+	int ret = GESTURE_ERROR_NONE;
 
-	int ret = ctx::gesture::me_is_supported(gesture);
-	if (ret == GESTURE_ERROR_NONE)
-		*supported = true;
+	if (motion_engine::check_coverage(gesture)) {
+		ret = motion_engine::is_supported(gesture);
+		*supported = (ret == GESTURE_ERROR_NONE);
+	}
 
-	return GESTURE_ERROR_NONE;
+	return ret;
 }
 
 EXTAPI int gesture_create(gesture_h *handle)
@@ -109,8 +111,8 @@ EXTAPI int gesture_start_recognition(gesture_h handle, gesture_type_e gesture, g
 
 	int ret;
 
-	if (ctx::gesture::me_check_coverage(gesture)) {
-		ret = ctx::gesture::me_start(handle, gesture, option);
+	if (motion_engine::check_coverage(gesture)) {
+		ret = motion_engine::start(handle, gesture, option);
 	} else {
 		ret = GESTURE_ERROR_INVALID_PARAMETER;
 	}
@@ -128,8 +130,8 @@ EXTAPI int gesture_stop_recognition(gesture_h handle)
 	int ret = GESTURE_ERROR_NOT_STARTED;
 
 	if (handle_map.find(handle->req_id) != NULL) {
-		if (ctx::gesture::me_check_coverage(handle->gesture))
-			ctx::gesture::me_stop(handle);
+		if (motion_engine::check_coverage(handle->gesture))
+			motion_engine::stop(handle);
 
 		handle_map.remove(handle->req_id);
 		ret = GESTURE_ERROR_NONE;

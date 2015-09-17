@@ -94,18 +94,18 @@ typedef enum {
  * @since_tizen @if MOBILE 2.3 @elseif WEARABLE 2.3.1 @endif
  */
 typedef enum {
-	GESTURE_EVENT_NONE		= 0,	/**< The gesture is not detected */
-	GESTURE_EVENT_DETECTED	= 1,	/**< The gesture is detected */
+	GESTURE_EVENT_NONE		= 0,	/**< Detected nothing */
+	GESTURE_EVENT_DETECTED	= 1,	/**< Detected the gesture */
 
-	GESTURE_SHAKE_DETECTED	= 1,	/**< Shake gesture is detected */
-	GESTURE_SHAKE_FINISHED	= 2,	/**< Shake gesture finished */
+	GESTURE_SHAKE_DETECTED	= 1,	/**< Shake gesture started */
+	GESTURE_SHAKE_FINISHED	= 2,	/**< Shake gesture stopped */
 
-	GESTURE_SNAP_X_NEGATIVE = 1,	/**< -X snap is detected */
-	GESTURE_SNAP_X_POSITIVE = 2,	/**< +X snap is detected */
-	GESTURE_SNAP_Y_NEGATIVE = 3,	/**< -Y snap is detected */
-	GESTURE_SNAP_Y_POSITIVE = 4,	/**< +Y snap is detected */
-	GESTURE_SNAP_Z_NEGATIVE = 5,	/**< -Z snap is detected */
-	GESTURE_SNAP_Z_POSITIVE = 6,	/**< +Z snap is detected */
+	GESTURE_SNAP_X_NEGATIVE = 1,	/**< Detected -X snap */
+	GESTURE_SNAP_X_POSITIVE = 2,	/**< Detected +X snap */
+	GESTURE_SNAP_Y_NEGATIVE = 3,	/**< Detected -Y snap */
+	GESTURE_SNAP_Y_POSITIVE = 4,	/**< Detected +Y snap */
+	GESTURE_SNAP_Z_NEGATIVE = 5,	/**< Detected -Z snap */
+	GESTURE_SNAP_Z_POSITIVE = 6,	/**< Detected +Z snap */
 } gesture_event_e;
 
 /**

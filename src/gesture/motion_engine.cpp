@@ -159,7 +159,7 @@ static int get_me_option(int mode)
 	return CTX_VALUE_UNDEFINED;
 }
 
-bool ctx::gesture::me_check_coverage(int motion)
+bool ctx::gesture::motion_engine::check_coverage(int motion)
 {
 	switch (motion) {
 	case GESTURE_SHAKE:
@@ -177,7 +177,7 @@ bool ctx::gesture::me_check_coverage(int motion)
 	}
 }
 
-int ctx::gesture::me_is_supported(int motion)
+int ctx::gesture::motion_engine::is_supported(int motion)
 {
 	int handle = -1, res;
 	int ev_type	= get_event_type(motion);
@@ -187,7 +187,7 @@ int ctx::gesture::me_is_supported(int motion)
 	return res;
 }
 
-int ctx::gesture::me_start(_cx_gesture_h *handle, int gesture, int option)
+int ctx::gesture::motion_engine::start(_cx_gesture_h *handle, int gesture, int option)
 {
 	int ev_type	= get_event_type(gesture);
 	int me_opt	= get_me_option(option);
@@ -206,7 +206,7 @@ int ctx::gesture::me_start(_cx_gesture_h *handle, int gesture, int option)
 	return GESTURE_ERROR_NONE;
 }
 
-int ctx::gesture::me_stop(_cx_gesture_h *handle)
+int ctx::gesture::motion_engine::stop(_cx_gesture_h *handle)
 {
 	LOGI("Stopping MotionEngine Event %d", handle->me_event);
 

@@ -23,13 +23,13 @@
 #include <stdbool.h>
 #include "gesture.h"
 
-namespace ctx { namespace gesture{
+namespace ctx { namespace gesture { namespace motion_engine {
 
-	bool me_check_coverage(int gesture);
-	int me_is_supported(int gesture);
-	int me_start(_cx_gesture_h *handle, int gesture, int mode);
-	int me_stop(_cx_gesture_h *handle);
+	bool check_coverage(int gesture);
+	int is_supported(int gesture);
+	int start(_cx_gesture_h *handle, int gesture, int mode);
+	int stop(_cx_gesture_h *handle);
 
-} }	/* namespace ctx::gesture */
+} } }
 
 #endif	/* End of _CX_GESTURE_MOTION_ENGINE_H_ */
