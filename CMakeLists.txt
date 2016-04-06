@@ -6,7 +6,7 @@ INCLUDE(GNUInstallDirs)
 SET(target "core-context-manager")
 
 # Source Lists
-FILE(GLOB_RECURSE SRCS src/*.cpp)
+FILE(GLOB SRCS src/*.cpp)
 
 SET(inc_subdir "context-service")
 SET(dependency "glib-2.0 dlog capi-base-common capi-system-info sensor")
@@ -15,7 +15,6 @@ SET(dependency "glib-2.0 dlog capi-base-common capi-system-info sensor")
 INCLUDE(FindPkgConfig)
 INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/include
-	${CMAKE_CURRENT_SOURCE_DIR}/src/shared
 )
 
 ADD_DEFINITIONS(-O2 -Wall -fPIC -fdata-sections -ffunction-sections -fvisibility=hidden)

@@ -1,7 +1,7 @@
 /*
  * motion
  *
- * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2016 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,17 +17,21 @@
  *
  */
 
-#ifndef __CONTEXT_UTIL_SENSOR_H__
-#define __CONTEXT_UTIL_SENSOR_H__
+#include <system_info.h>
+#include "TypesInternal.h"
 
-#include <sensor_internal.h>
+int motion::isSupported(const char *feature)
+{
+	bool supported = false;
+	int ret = system_info_get_platform_bool(feature, &supported);
 
-namespace ctx { namespace sensor {
+	if (ret == ERR_NONE && !supported) {
+		_W("Not Supported: %s", feature);
+		return ERR_NOT_SUPPORTED;
+	} else if (ret != ERR_NONE) {
+		_E("Getting system info failed: %#x", ret);
+		return ERR_OPERATION_FAILED;
+	}
 
-	int connect(int *handle, sensor_type_t sensor, unsigned int event, int option, sensor_cb_t cb, void *user_data);
-	void disconnect(int *handle, sensor_type_t sensor, unsigned int event);
-
-} }	 /* namespace ctx::sensor */
-
-#endif /* __CONTEXT_UTIL_SENSOR_H__ */
-
+	return ERR_NONE;
+}
