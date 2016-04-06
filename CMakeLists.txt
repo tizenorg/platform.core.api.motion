@@ -2,22 +2,14 @@ CMAKE_MINIMUM_REQUIRED(VERSION 2.6)
 PROJECT(motion)
 INCLUDE(GNUInstallDirs)
 
-# Source Lists
-SET(SRCS
-	src/shared/ctx_util_misc.cpp
-	src/shared/ctx_util_sensor.cpp
-# Gesture
-	src/gesture/gesture.cpp
-	src/gesture/motion_engine.cpp
-# Activity
-	src/activity/activity.cpp
-)
-
-SET(inc_subdir "context-service")
-SET(dependency "dlog glib-2.0 capi-base-common capi-system-info sensor")
-
 # Target lib (for backward compatibility, the below old naming is used)
 SET(target "core-context-manager")
+
+# Source Lists
+FILE(GLOB_RECURSE SRCS src/*.cpp)
+
+SET(inc_subdir "context-service")
+SET(dependency "glib-2.0 dlog capi-base-common capi-system-info sensor")
 
 # Options
 INCLUDE(FindPkgConfig)
@@ -26,7 +18,8 @@ INCLUDE_DIRECTORIES(
 	${CMAKE_CURRENT_SOURCE_DIR}/src/shared
 )
 
-ADD_DEFINITIONS(-O2 -Wall -fPIC -fvisibility=hidden -Wl,--as-needed)
+ADD_DEFINITIONS(-O2 -Wall -fPIC -fdata-sections -ffunction-sections -fvisibility=hidden)
+SET(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} -fPIC -Wl,--as-needed -Wl,--gc-section -Wl,--print-gc-section")
 
 # Build
 pkg_check_modules(pkgs REQUIRED ${dependency})
@@ -43,7 +36,7 @@ SET_TARGET_PROPERTIES(${target} PROPERTIES SOVERSION ${MAJORVER})
 SET_TARGET_PROPERTIES(${target} PROPERTIES VERSION ${FULLVER})
 
 # Install
-INSTALL(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR} COMPONENT RuntimeLibraries)
+INSTALL(TARGETS ${target} DESTINATION ${CMAKE_INSTALL_LIBDIR})
 INSTALL(
 	DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/include/ DESTINATION ${CMAKE_INSTALL_INCLUDEDIR}/${inc_subdir}
 	FILES_MATCHING PATTERN "*.h"
@@ -51,7 +44,7 @@ INSTALL(
 
 SET(VERSION ${FULLVER})
 SET(PC_PREFIX ${CMAKE_INSTALL_PREFIX})
-SET(PC_NAME ${target})
+SET(PC_NAME ${PROJECT_NAME})
 SET(PC_LIBDIR "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_LIBDIR}")
 SET(PC_INCLUDE "${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_INCLUDEDIR}/${inc_subdir}")
 SET(PC_DESCRIPTION "Tizen Native Motion Recognition API")
