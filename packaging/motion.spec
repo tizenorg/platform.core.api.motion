@@ -36,7 +36,6 @@ export CXXFLAGS+=" -fno-strict-aliasing -fno-unroll-loops -fsigned-char -fstrict
 
 export   CFLAGS+=" -fno-common"
 export CXXFLAGS+=" -Wnon-virtual-dtor"
-export CXXFLAGS+=" -std=c++11 -Wno-c++11-compat"
 
 #export   CFLAGS+=" -Wcast-qual"
 #export CXXFLAGS+=" -Wcast-qual"
