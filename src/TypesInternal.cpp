@@ -1,7 +1,5 @@
 /*
- * motion
- *
- * Copyright (c) 2014 Samsung Electronics Co., Ltd.
+ * Copyright (c) 2016 Samsung Electronics Co., Ltd.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +15,21 @@
  *
  */
 
-#ifndef _CX_GESTURE_MOTION_ENGINE_H_
-#define _CX_GESTURE_MOTION_ENGINE_H_
+#include <system_info.h>
+#include "TypesInternal.h"
 
-#include <stdbool.h>
-#include "gesture.h"
+int motion::isSupported(const char *feature)
+{
+	bool supported = false;
+	int ret = system_info_get_platform_bool(feature, &supported);
 
-namespace ctx { namespace gesture { namespace motion_engine {
+	if (ret == ERR_NONE && !supported) {
+		_W("Not Supported: %s", feature);
+		return ERR_NOT_SUPPORTED;
+	} else if (ret != ERR_NONE) {
+		_E("Getting system info failed: %#x", ret);
+		return ERR_OPERATION_FAILED;
+	}
 
-	bool check_coverage(int gesture);
-	int is_supported(int gesture);
-	int start(_cx_gesture_h *handle, int gesture, int mode);
-	int stop(_cx_gesture_h *handle);
-
-} } }
-
-#endif	/* End of _CX_GESTURE_MOTION_ENGINE_H_ */
+	return ERR_NONE;
+}
