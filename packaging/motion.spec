@@ -1,6 +1,6 @@
 Name:       motion
 Summary:    Tizen Native Motion Recognition API
-Version:    1.1.4
+Version:    1.2.0
 Release:    1
 Group:      Service/Context
 License:    Apache-2.0
