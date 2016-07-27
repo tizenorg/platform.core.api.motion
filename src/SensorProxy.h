@@ -32,7 +32,7 @@ namespace motion {
 		void setPowerSave(bool ps);
 		void setUserData(void *data);
 
-		void stop();
+		bool stop(bool force = false);
 
 		virtual bool start();
 

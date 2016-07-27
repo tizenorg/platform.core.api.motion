@@ -34,7 +34,7 @@ SensorProxy::SensorProxy()
 
 SensorProxy::~SensorProxy()
 {
-	stop();
+	stop(true);
 }
 
 void SensorProxy::setSensor(sensor_type_t type)
@@ -78,14 +78,18 @@ bool SensorProxy::start()
 	return true;
 }
 
-void SensorProxy::stop()
+bool SensorProxy::stop(bool force)
 {
-	IF_FAIL_VOID(sensorHandle >= 0);
+	if (!force) {
+		IF_FAIL_RETURN(sensorHandle >= 0, false);
+	}
 
 	sensord_stop(sensorHandle);
 	sensord_unregister_event(sensorHandle, SENSOR_EVENT(sensorType));
 	sensord_disconnect(sensorHandle);
 	sensorHandle = -1;
+
+	return true;
 }
 
 double SensorProxy::getTime(unsigned long long monotonic)

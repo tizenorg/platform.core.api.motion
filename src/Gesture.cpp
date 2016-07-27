@@ -80,16 +80,16 @@ EXTAPI int gesture_start_recognition(gesture_h handle, gesture_type_e gesture, g
 	ASSERT_NOT_NULL(callback);
 	IF_FAIL_RETURN(IS_VALID_GESTURE(gesture), ERR_INVALID_PARAMETER);
 
-	if (!handle->proxy->setGesture(gesture)) {
-		return ERR_INVALID_PARAMETER;
-	}
-
 	if (option == GESTURE_OPTION_DEFAULT) {
 		handle->proxy->setPowerSave(true);
 	} else if (option == GESTURE_OPTION_ALWAYS_ON) {
 		handle->proxy->setPowerSave(false);
 	} else {
 		return ERR_INVALID_PARAMETER;
+	}
+
+	if (!handle->proxy->setGesture(gesture)) {
+		return GESTURE_ERROR_NOT_SUPPORTED;
 	}
 
 	handle->proxy->setCb(callback);
@@ -107,7 +107,7 @@ EXTAPI int gesture_stop_recognition(gesture_h handle)
 	ASSERT_SUPPORTED(FEATURE_GESTURE);
 	ASSERT_NOT_NULL(handle);
 
-	handle->proxy->stop();
+	IF_FAIL_RETURN(handle->proxy->stop(), GESTURE_ERROR_NOT_STARTED);
 
 	return ERR_NONE;
 }

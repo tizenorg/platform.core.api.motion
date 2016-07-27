@@ -100,7 +100,7 @@ EXTAPI int activity_stop_recognition(activity_h handle)
 	ASSERT_SUPPORTED(FEATURE_ACTIVITY);
 	ASSERT_NOT_NULL(handle);
 
-	handle->proxy->stop();
+	IF_FAIL_RETURN(handle->proxy->stop(), ACTIVITY_ERROR_NOT_STARTED);
 
 	return ERR_NONE;
 }
